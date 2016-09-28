@@ -8,6 +8,7 @@ var Promise = require('bluebird');
 
 passport.use(new LocalStrategy(
 	function(username, password, done) {
+		console.log('what is username and password??', username, password);
 	// search username and password for comparison
 		User.findAll({where: {username: username}})
 		.then(function(user) {
