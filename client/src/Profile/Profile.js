@@ -39,7 +39,7 @@ const Profile = (props) => {
       </Row>
       <div className= "profileNav">
       <Link to="/">All Friends</Link>
-      <Link to="/recent">Recent</Link>
+      <Link to="/online">Online</Link>
       <Link to="/suggested">You Should Talk to...</Link>
       </div>
 

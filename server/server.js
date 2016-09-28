@@ -8,14 +8,17 @@ var port = process.env.PORT || 3000;
 var Schema = require('./db/Schema');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
+var bodyparser = require('body-parser');
+var cors = require('cors');
 require('./auth/auth');
 
 var fs = require('fs');
-var https = require('https')
-var privateKey  = fs.readFileSync('server/key.pem', 'utf8');
-var certificate = fs.readFileSync('server/cert.pem', 'utf8');
+var https = require('https');
+var privateKey  = fs.readFileSync(__dirname + '/key.pem', 'utf8');
+var certificate = fs.readFileSync(__dirname + '/cert.pem', 'utf8');
 var credentials = {key: privateKey, cert: certificate};
 var httpsServer = https.createServer(credentials, app);
+
 
 var os = require('os');
 var io = require('socket.io')(httpsServer);
@@ -25,6 +28,8 @@ app.use(express.static(__dirname + '/../client/'));
 app.use(session({secret: 'lets ReTok'}));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(cors());
+// app.use(bodyparser.json());
 
 app.use('/graphql', GraphHTTP({
   schema: Schema,
@@ -32,11 +37,23 @@ app.use('/graphql', GraphHTTP({
   graphiql: true
 }));
 
+// app.use(function(req, res, next) {
+//     res.header("Access-Control-Allow-Origin", "*");
+//     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//     next();
+// });
+
+// app.post('/test', function(req, res) {
+// 	console.log('checking req body', req.body);
+// });
+
 app.post('/login', passport.authenticate('local', {
-  successRedirect: '/',
-  failureRedirect: '/home',
+  // successRedirect: '/',
+  failureRedirect: '/',
 }) ,function(req, res) {
-  res.status(200).send('welcome');
+  res.redirect('http://127.0.0.1:3000/#/profile/');
+  // res.render('/profile');
+  // res.status(200).send('welcome');
   // res.redirect('/profile/' + req.user.username);
 });
 
