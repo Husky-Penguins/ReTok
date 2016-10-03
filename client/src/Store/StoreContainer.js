@@ -3,7 +3,7 @@ import { render } from 'react-dom'
 import { connect } from 'react-redux'
 import { Router, Route, hashHistory, IndexRoute, Link } from 'react-router'
 import * as userActions from '../Redux/userReducer'
-import {emojify} from 'react-emojione';
+// import {emojify} from 'react-emojione';
 
 class StoreContainer extends React.Component {
 	constructor(props) {

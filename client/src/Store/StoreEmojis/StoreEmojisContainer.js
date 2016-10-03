@@ -23,6 +23,7 @@ class StoreEmojisContainer extends React.Component {
     if (emojiCost > userCoinTotal) {
       alert('you dont have enough coins to buy this emoji');
     } else {
+      let myHeaders = new Headers({'Content-Type': 'application/graphql; charset=utf-8'});
       userCoinTotal = userCoinTotal - emojiCost;
 
           let options = {
@@ -41,7 +42,7 @@ class StoreEmojisContainer extends React.Component {
           fetch('/graphql', options).then((res) =>{
             return res.json().then((data) => {
               console.log('checking data after fetching', data);
-              var userCopy = Object.assign({}, this.props.user, {coin: updatedCoin, emoji: emoji});
+              var userCopy = Object.assign({}, this.props.user, {coin: userCoinTotal, emoji: emoji});
               this.props.dispatch(userActions.updateUser(userCopy));
 
               var boughtEmoji = storeEmojisCopy.splice(key, 1);
@@ -61,8 +62,8 @@ class StoreEmojisContainer extends React.Component {
 
   render() {
     return (
-      <div>
-      {this.props.storeEmojis.map((item, index) => <StoreEmoji key={index} emoji={item} buyEmoji={this.buyEmoji.bind(this)}/>)}
+      <div className="storeEmojisContainer">
+      {this.props.storeEmojis.map((item, index) => <StoreEmoji key={index} index={index} emoji={item} buyEmoji={this.buyEmoji.bind(this)}/>)}
       </div>
       )
   }

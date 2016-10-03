@@ -11,7 +11,7 @@ const StoreUserEmoji = (props) => {
     // }
   return(
     <div>
-      {emojify(props.emoji.emoji)}
+      {emojify(props.emoji.emoji, {output: 'unicode'})}
     </div>
     )
 }
