@@ -34749,7 +34749,7 @@ var _temp = function () {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-	value: true
+		value: true
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -34781,121 +34781,100 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 // import {emojify} from 'react-emojione';
 
 var StoreContainer = function (_React$Component) {
-	_inherits(StoreContainer, _React$Component);
+		_inherits(StoreContainer, _React$Component);
 
-	function StoreContainer(props) {
-		_classCallCheck(this, StoreContainer);
+		function StoreContainer(props) {
+				_classCallCheck(this, StoreContainer);
 
-		return _possibleConstructorReturn(this, (StoreContainer.__proto__ || Object.getPrototypeOf(StoreContainer)).call(this, props));
-	}
-
-	_createClass(StoreContainer, [{
-		key: 'componentWillMount',
-		value: function componentWillMount() {
-			var _this2 = this;
-
-			// var emojis = this.props.emojis.slice();
-			// var userEmojis = this.props.userEmojis.slice();
-
-			// for (var i = 0; i < emojis.length; i++) {
-			// 		var storeEmoji = JSON.stringify(emojis[i]);
-			// 	for (var j = 0; j < userEmojis.length; j++) {
-			// 		var userEmoji = JSON.stringify(userEmojis[j]);
-			// 		if (userEmoji === storeEmoji) {
-			// 			emojis[i]['purchased'] = true;
-			// 		}
-			// 	}
-			// }
-			// this.props.dispatch(userActions.updateEmojis(emojis));
-			var myHeaders = new Headers({ 'Content-Type': 'application/graphql; charset=utf-8' });
-			var options = {
-
-				method: 'POST',
-				headers: myHeaders,
-				body: '\n\t\t    {  \n\t\t      getOtherEmoji(username: "' + this.props.user.username + '")\n\t\t      {\n\t\t      \temoji\n\t\t      \tprice\n\t\t          }\n\t\t    }'
-			};
-
-			fetch('/graphql', options).then(function (res) {
-				return res.json().then(function (data) {
-					console.log('checking Store emoji data after fetching', data.data.getOtherEmoji);
-					_this2.props.dispatch(userActions.updateStoreEmojis(data.data.getOtherEmoji));
-					console.log('i hit StoreEmojisContainer', _this2.props.storeEmojis);
-				});
-			});
+				return _possibleConstructorReturn(this, (StoreContainer.__proto__ || Object.getPrototypeOf(StoreContainer)).call(this, props));
 		}
 
-		// buyEmoji(emoji) {
-		// 	var emojiCost = emoji.cost;
-		// 	var userCoinTotal = this.props.user.coin;
+		_createClass(StoreContainer, [{
+				key: 'componentWillMount',
+				value: function componentWillMount() {
+						var _this2 = this;
 
-		// 	if (emojiCost > userCoinTotal) {
-		// 		alert('you dont have enough coins to buy this emoji');
-		// 	} else {
-		// 		userCoinTotal = userCoinTotal - emojiCost;
+						// var emojis = this.props.emojis.slice();
+						// var userEmojis = this.props.userEmojis.slice();
 
-		// 		    let options = {
+						// for (var i = 0; i < emojis.length; i++) {
+						// 		var storeEmoji = JSON.stringify(emojis[i]);
+						// 	for (var j = 0; j < userEmojis.length; j++) {
+						// 		var userEmoji = JSON.stringify(userEmojis[j]);
+						// 		if (userEmoji === storeEmoji) {
+						// 			emojis[i]['purchased'] = true;
+						// 		}
+						// 	}
+						// }
+						// this.props.dispatch(userActions.updateEmojis(emojis));
+						var myHeaders = new Headers({ 'Content-Type': 'application/graphql; charset=utf-8' });
+						var options = {
 
-		// 		      method: 'POST',
-		// 		      headers: myHeaders,
-		// 		      body: `
-		// 		          mutation {
-		// 		          updateUser(username: \"${this.props.user.username}\" coin:${userCoinTotal} emoji:${emoji})  {
-		// 		            username
-		// 		          }
-		// 		          }
-		// 		          `
+								method: 'POST',
+								headers: myHeaders,
+								body: '\n\t\t    {  \n\t\t      getOtherEmoji(username: "' + this.props.user.username + '")\n\t\t      {\n\t\t      \temoji\n\t\t      \tprice\n\t\t          }\n\t\t    }'
+						};
 
-		// 		    };
-		// 		    fetch('/graphql', options).then((res) =>{
-		// 		      return res.json().then((data) => {
-		// 		        console.log('checking data after fetching', data);
-		// 		        var userCopy = Object.assign({}, this.props.user, {coin: updatedCoin, emoji: emoji});
-		// 		        this.props.dispatch(userActions.updateUser(userCopy));
+						fetch('/graphql', options).then(function (res) {
+								return res.json().then(function (data) {
+										console.log('checking Store emoji data after fetching', data.data.getOtherEmoji);
+										_this2.props.dispatch(userActions.updateStoreEmojis(data.data.getOtherEmoji));
 
-		// 		        console.log('checking my user data to see successful dispatch', this.props.user);
-		// 		  })
-		// 		})
+										var optionsUserEmoji = {
 
-		// 	}
-		// }
-		//TODO: Finish Store:
+												method: 'POST',
+												headers: myHeaders,
+												body: '\n\t\t            {  \n\t\t              getEmoji(username: "' + _this2.props.user.username + '")\n\t\t              {\n\t\t              \temoji\n\t\t              \tprice\n\t\t                  }\n\t\t            }'
+										};
 
-	}, {
-		key: 'render',
-		value: function render() {
-			return _react2.default.createElement(
-				'div',
-				null,
-				_react2.default.createElement(
-					'div',
-					{ className: 'profileNav' },
-					_react2.default.createElement(
-						_reactRouter.Link,
-						{ to: '/store' },
-						'Buy Emojis'
-					),
-					_react2.default.createElement(
-						_reactRouter.Link,
-						{ to: '/userinventory' },
-						'Emojis I Own'
-					)
-				),
-				this.props.children
-			);
-		}
-	}]);
+										fetch('/graphql', optionsUserEmoji).then(function (res) {
+												return res.json().then(function (data) {
+														console.log('checking data for user emoji', data);
+														_this2.props.dispatch(userActions.updateUserEmojis(data.data.getEmoji));
+												});
+										});
+								});
+						});
+				}
 
-	return StoreContainer;
+				//TODO: Finish Store:
+
+		}, {
+				key: 'render',
+				value: function render() {
+						return _react2.default.createElement(
+								'div',
+								null,
+								_react2.default.createElement(
+										'div',
+										{ className: 'profileNav' },
+										_react2.default.createElement(
+												_reactRouter.Link,
+												{ to: '/store' },
+												'Buy Emojis'
+										),
+										_react2.default.createElement(
+												_reactRouter.Link,
+												{ to: '/userinventory' },
+												'Emojis I Own'
+										)
+								),
+								this.props.children
+						);
+				}
+		}]);
+
+		return StoreContainer;
 }(_react2.default.Component);
 
 function mapStateToProps(state) {
-	return {
-		//TODO: Configure server and database to know what kind of object I get back for emojis
-		emojis: state.userReducer.emojis,
-		user: state.userReducer.user,
-		userEmojis: state.userReducer.userEmojis,
-		storeEmojis: state.userReducer.storeEmojis
-	};
+		return {
+				//TODO: Configure server and database to know what kind of object I get back for emojis
+				emojis: state.userReducer.emojis,
+				user: state.userReducer.user,
+				userEmojis: state.userReducer.userEmojis,
+				storeEmojis: state.userReducer.storeEmojis
+		};
 }
 
 var _default = (0, _reactRedux.connect)(mapStateToProps)(StoreContainer);
@@ -34904,15 +34883,15 @@ exports.default = _default;
 ;
 
 var _temp = function () {
-	if (typeof __REACT_HOT_LOADER__ === 'undefined') {
-		return;
-	}
+		if (typeof __REACT_HOT_LOADER__ === 'undefined') {
+				return;
+		}
 
-	__REACT_HOT_LOADER__.register(mapStateToProps, 'mapStateToProps', '/Users/Rob/Desktop/ReTok/client/src/Store/StoreContainer.js');
+		__REACT_HOT_LOADER__.register(mapStateToProps, 'mapStateToProps', '/Users/Rob/Desktop/ReTok/client/src/Store/StoreContainer.js');
 
-	__REACT_HOT_LOADER__.register(StoreContainer, 'StoreContainer', '/Users/Rob/Desktop/ReTok/client/src/Store/StoreContainer.js');
+		__REACT_HOT_LOADER__.register(StoreContainer, 'StoreContainer', '/Users/Rob/Desktop/ReTok/client/src/Store/StoreContainer.js');
 
-	__REACT_HOT_LOADER__.register(_default, 'default', '/Users/Rob/Desktop/ReTok/client/src/Store/StoreContainer.js');
+		__REACT_HOT_LOADER__.register(_default, 'default', '/Users/Rob/Desktop/ReTok/client/src/Store/StoreContainer.js');
 }();
 
 ;
@@ -35036,7 +35015,8 @@ var StoreEmojisContainer = function (_React$Component) {
     value: function buyEmoji(emoji, key) {
       var _this2 = this;
 
-      var emojiCost = emoji.cost;
+      var emojiCost = emoji.price;
+      console.log('check whats is inside of emoji ------>', emoji);
       var userCoinTotal = this.props.user.coin;
       var storeEmojisCopy = this.props.storeEmojis.slice();
       var userEmojis = this.props.userEmojis.slice();
@@ -35044,31 +35024,48 @@ var StoreEmojisContainer = function (_React$Component) {
       if (emojiCost > userCoinTotal) {
         alert('you dont have enough coins to buy this emoji');
       } else {
-        var myHeaders = new Headers({ 'Content-Type': 'application/graphql; charset=utf-8' });
-        userCoinTotal = userCoinTotal - emojiCost;
+        (function () {
+          var myHeaders = new Headers({ 'Content-Type': 'application/graphql; charset=utf-8' });
+          userCoinTotal = userCoinTotal - emojiCost;
+          console.log('checking user coin total ---->', userCoinTotal);
+          var options = {
 
-        var options = {
+            method: 'POST',
+            headers: myHeaders,
+            body: 'mutation \n\n            {\n                updateEmojiUser(username: "' + _this2.props.user.username + '" emoji: "' + emoji.emoji + '")  {\n                  UserId\n                  }\n                }\n                '
 
-          method: 'POST',
-          headers: myHeaders,
-          body: '\n                mutation {\n                updateEmojiUser(username: "' + this.props.user.username + '" emoji:' + emoji.emoji + ')  {\n                  \n                }\n                }\n                '
+          };
+          fetch('/graphql', options).then(function (res) {
+            return res.json().then(function (data) {
 
-        };
-        fetch('/graphql', options).then(function (res) {
-          return res.json().then(function (data) {
-            console.log('checking data after fetching', data);
-            var userCopy = Object.assign({}, _this2.props.user, { coin: userCoinTotal, emoji: emoji });
-            _this2.props.dispatch(userActions.updateUser(userCopy));
+              var userOptions = {
 
-            var boughtEmoji = storeEmojisCopy.splice(key, 1);
-            userEmojis.push(boughtEmoji);
+                method: 'POST',
+                headers: myHeaders,
+                body: '\n                    mutation {\n                    updateUser(username: "' + _this2.props.user.username + '" coin:' + userCoinTotal + ')  {\n                      username\n                    }\n                    }\n                    '
 
-            _this2.props.dispatch(userActions.updateStoreEmojis(storeEmojisCopy));
-            _this2.props.dispatch(userActions.updateUserEmojis(userEmojis));
+              };
 
-            console.log('checking my user data to see successful dispatch', _this2.props.user);
+              fetch('/graphql', userOptions).then(function (res) {
+                return res.json().then(function (data) {
+
+                  console.log('checking data after fetching', data);
+                  var userCopy = Object.assign({}, _this2.props.user, { coin: userCoinTotal, emoji: emoji });
+                  _this2.props.dispatch(userActions.updateUser(userCopy));
+
+                  var boughtEmoji = storeEmojisCopy.splice(key, 1);
+                  console.log('what is bought emoji', boughtEmoji);
+                  userEmojis.push(boughtEmoji[0]);
+
+                  _this2.props.dispatch(userActions.updateStoreEmojis(storeEmojisCopy));
+                  _this2.props.dispatch(userActions.updateUserEmojis(userEmojis));
+
+                  console.log('checking my user data to see successful dispatch', _this2.props.user);
+                });
+              });
+            });
           });
-        });
+        })();
       }
     }
   }, {
@@ -35141,8 +35138,12 @@ var StoreUserEmoji = function StoreUserEmoji(props) {
 
   return _react2.default.createElement(
     'div',
-    null,
-    (0, _reactEmojione.emojify)(props.emoji.emoji, { output: 'unicode' })
+    { className: 'oneEmoji' },
+    _react2.default.createElement(
+      'div',
+      { className: 'emojiWrapper' },
+      (0, _reactEmojione.emojify)(props.emoji.emoji, { output: 'unicode' })
+    )
   );
 };
 
@@ -35222,7 +35223,7 @@ var StoreUserEmojisContainer = function (_React$Component) {
     value: function render() {
       return _react2.default.createElement(
         'div',
-        null,
+        { className: 'storeEmojisContainer' },
         this.props.userEmojis.map(function (item, index) {
           return _react2.default.createElement(_StoreUserEmoji2.default, { key: index, index: index, emoji: item });
         })

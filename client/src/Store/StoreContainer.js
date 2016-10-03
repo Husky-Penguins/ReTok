@@ -44,7 +44,35 @@ class StoreContainer extends React.Component {
 		      return res.json().then((data) => {
 		        console.log('checking Store emoji data after fetching', data.data.getOtherEmoji);
 		        this.props.dispatch(userActions.updateStoreEmojis(data.data.getOtherEmoji));
-		        console.log('i hit StoreEmojisContainer', this.props.storeEmojis);
+
+
+
+		        let optionsUserEmoji = {
+
+		          method: 'POST',
+		          headers: myHeaders,
+		          body: `
+		            {  
+		              getEmoji(username: \"${this.props.user.username}\")
+		              {
+		              	emoji
+		              	price
+		                  }
+		            }`
+		        };
+
+
+		        fetch('/graphql', optionsUserEmoji).then((res) =>{
+		          return res.json().then((data) => {
+		          	console.log('checking data for user emoji', data);
+		          	this.props.dispatch(userActions.updateUserEmojis(data.data.getEmoji));
+
+		          })
+		          })		        
+
+
+
+
 		  		})
 				})
 		
@@ -52,40 +80,6 @@ class StoreContainer extends React.Component {
 	}
 
 
-	// buyEmoji(emoji) {
-	// 	var emojiCost = emoji.cost;
-	// 	var userCoinTotal = this.props.user.coin;
-
-	// 	if (emojiCost > userCoinTotal) {
-	// 		alert('you dont have enough coins to buy this emoji');
-	// 	} else {
-	// 		userCoinTotal = userCoinTotal - emojiCost;
-
-	// 		    let options = {
-
-	// 		      method: 'POST',
-	// 		      headers: myHeaders,
-	// 		      body: `
-	// 		          mutation {
-	// 		          updateUser(username: \"${this.props.user.username}\" coin:${userCoinTotal} emoji:${emoji})  {
-	// 		            username
-	// 		          }
-	// 		          }
-	// 		          `
-
-	// 		    };
-	// 		    fetch('/graphql', options).then((res) =>{
-	// 		      return res.json().then((data) => {
-	// 		        console.log('checking data after fetching', data);
-	// 		        var userCopy = Object.assign({}, this.props.user, {coin: updatedCoin, emoji: emoji});
-	// 		        this.props.dispatch(userActions.updateUser(userCopy));
-			       
-	// 		        console.log('checking my user data to see successful dispatch', this.props.user);
-	// 		  })
-	// 		})
-
-	// 	}
-	// }
 	//TODO: Finish Store:
 	render() {
 		return (

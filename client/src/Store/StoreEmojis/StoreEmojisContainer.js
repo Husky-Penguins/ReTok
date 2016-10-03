@@ -15,7 +15,8 @@ class StoreEmojisContainer extends React.Component {
   }
 
   buyEmoji(emoji, key) {
-    var emojiCost = emoji.cost;
+    var emojiCost = emoji.price;
+    console.log('check whats is inside of emoji ------>', emoji);
     var userCoinTotal = this.props.user.coin;
     var storeEmojisCopy = this.props.storeEmojis.slice();
     var userEmojis = this.props.userEmojis.slice();
@@ -25,33 +26,60 @@ class StoreEmojisContainer extends React.Component {
     } else {
       let myHeaders = new Headers({'Content-Type': 'application/graphql; charset=utf-8'});
       userCoinTotal = userCoinTotal - emojiCost;
-
+      console.log('checking user coin total ---->', userCoinTotal);
           let options = {
 
             method: 'POST',
             headers: myHeaders,
-            body: `
-                mutation {
-                updateEmojiUser(username: \"${this.props.user.username}\" emoji:${emoji.emoji})  {
-                  
-                }
+            body: `mutation 
+
+            {
+                updateEmojiUser(username: \"${this.props.user.username}\" emoji: \"${emoji.emoji}\")  {
+                  UserId
+                  }
                 }
                 `
 
           };
           fetch('/graphql', options).then((res) =>{
             return res.json().then((data) => {
+
+
+              let userOptions = {
+
+                method: 'POST',
+                headers: myHeaders,
+                body: `
+                    mutation {
+                    updateUser(username: \"${this.props.user.username}\" coin:${userCoinTotal})  {
+                      username
+                    }
+                    }
+                    `
+
+              };
+
+              fetch('/graphql', userOptions).then((res) =>{
+                return res.json().then((data) => {
+
+
+
+
               console.log('checking data after fetching', data);
               var userCopy = Object.assign({}, this.props.user, {coin: userCoinTotal, emoji: emoji});
               this.props.dispatch(userActions.updateUser(userCopy));
 
               var boughtEmoji = storeEmojisCopy.splice(key, 1);
-              userEmojis.push(boughtEmoji);
+              console.log('what is bought emoji', boughtEmoji);
+              userEmojis.push(boughtEmoji[0]);
 
               this.props.dispatch(userActions.updateStoreEmojis(storeEmojisCopy));
               this.props.dispatch(userActions.updateUserEmojis(userEmojis));
              
               console.log('checking my user data to see successful dispatch', this.props.user);
+
+            })
+              })
         })
       })
 

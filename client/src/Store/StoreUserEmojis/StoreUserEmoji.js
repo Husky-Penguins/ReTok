@@ -4,9 +4,10 @@ import {emojify} from 'react-emojione';
 const StoreUserEmoji = (props) => {
 
   return(
-    <div>
-
-      {emojify(props.emoji.emoji, {output: 'unicode'})}
+    <div className="oneEmoji">
+      <div className="emojiWrapper">
+        {emojify(props.emoji.emoji, {output: 'unicode'})}
+      </div>
     </div>
     )
 }
