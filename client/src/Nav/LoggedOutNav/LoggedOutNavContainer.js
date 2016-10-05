@@ -4,6 +4,7 @@ import axios from 'axios'
 import { Router, Route, IndexRoute, Link } from 'react-router'
 import { connect } from 'react-redux'
 import * as userActions from '../../Redux/userReducer'
+import friendScoreCalculator from '../../friendTierCalculator'
 
 
 class LoggedOutNavContainer extends React.Component {
@@ -14,6 +15,21 @@ class LoggedOutNavContainer extends React.Component {
       }
     } 
 
+  tierRanking(friends) {
+    var rankedFriends = [];
+    var num = 0;
+    if (friends.length <= 10) {
+      num = friends.length;
+    } else if (friends.length <= 20 && friends.length > 5) {
+      num = Math.min(5, friends.length);
+    } else {
+      num = Math.min(10, friends.length);
+    }
+    for (var i = 0; i < num; i++) {
+      rankedFriends.push(friends[i]);
+    }
+    return rankedFriends;
+  }
 
   loggingIn(username, password) {
 
@@ -54,12 +70,14 @@ class LoggedOutNavContainer extends React.Component {
                 findFriends(username: \"${username}\")
                 {
                       username
-                      password
                       profilePic
                       firstName
                       lastName
                       email
                       online
+                      videoChatCount
+                      textChatCount
+                      lastChatTime
                     }
               }`
 
@@ -69,9 +87,13 @@ class LoggedOutNavContainer extends React.Component {
               console.log('checking my friends data',data.data.findFriends);
               var friends = data.data.findFriends;
               if(friends) {
+                friendScoreCalculator(friends);
                 var onlineFriends = friends.filter(friend => friend.online === true);
+                var suggestedFriends = this.tierRanking(onlineFriends.slice().sort((friend0, friend1) => {return friend1.score - friend0.score}));
+                // console.log('suggested friends: ', suggestedFriends);
                 this.props.dispatch(userActions.updateFriends(friends));
                 this.props.dispatch(userActions.updateOnlineFriends(onlineFriends));
+                this.props.dispatch(userActions.updateSuggestedFriends(suggestedFriends));
                 this.props.dispatch(userActions.updateFriendCount(friends.length));
                 console.log('user name',username);
               }

@@ -4,7 +4,6 @@ import SignInNav from './SignInNav'
 import axios from 'axios'
 import { connect } from 'react-redux'
 import { Router, Route, IndexRoute, Link } from 'react-router'
-import io from 'socket.io-client'
 import * as userActions from '../../Redux/userReducer'
 
 

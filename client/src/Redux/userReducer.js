@@ -43,6 +43,13 @@ export function updateOnlineFriends (onlineFriends) {
   }
 }
 
+export function updateSuggestedFriends (suggestedFriends) {
+  return {
+    type: 'UPDATE_SUGGESTED_FRIENDS',
+    suggestedFriends,
+  }
+}
+
 export function updateFriendCount (count) {
   return {
     type: 'UPDATE_FRIEND_COUNT',
@@ -104,6 +111,7 @@ const userInitialState = {
   user: {username: 'buddyboowaggytails', password: 'abcd1234', firstName: 'Boo', lastName: 'theDog', email: 'buddyboo@gmail.com', dob: '9/9/1999', profilePic: 'http://images5.fanpop.com/image/photos/31300000/-Boo-Buddy-boo-and-buddy-31314627-403-403.jpg', coin: 0, emoji: ''},
   friends: [],
   onlineFriends: [],
+  suggestedFriends: [],
   friendCount: 0,
   isLoggedIn: false,
   error: '',
@@ -166,6 +174,13 @@ export default function userReducer (state = userInitialState, action) {
       return {
         ...state,
         onlineFriends: action.onlineFriends,
+      }
+    }
+
+    case 'UPDATE_SUGGESTED_FRIENDS' : {
+      return {
+        ...state,
+        suggestedFriends: action.suggestedFriends,
       }
     }
 

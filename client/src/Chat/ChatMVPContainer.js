@@ -1,7 +1,6 @@
 import React from 'react'
 import { render } from 'react-dom'
 import { connect } from 'react-redux'
-import io from 'socket.io-client'
 import * as userActions from '../Redux/userReducer'
 
 class ChatMVPContainer extends React.Component {
