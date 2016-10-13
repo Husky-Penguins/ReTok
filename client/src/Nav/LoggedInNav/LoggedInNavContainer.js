@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react'
 import LoggedInNav from './LoggedInNav'
-import SignInNav from './SignInNav'
 import axios from 'axios'
 import { connect } from 'react-redux'
 import { Router, Route, IndexRoute, Link } from 'react-router'
@@ -41,7 +40,7 @@ class LoggedInNavContainer extends React.Component {
   
   logout() {
     var socket = this.props.socket;
-    axios.get('/logout');
+    axios.get('/logout').then( () => {
     this.props.dispatch(userActions.toggleLogIn(false));
 
     let myHeaders = new Headers({'Content-Type': 'application/graphql; charset=utf-8'});
@@ -60,14 +59,17 @@ class LoggedInNavContainer extends React.Component {
     };
     fetch('/graphql', options).then((res) =>{
       return res.json().then((data) => {
-          // console.log(data);
+	  socket.emit('updateFriends', this.props.friends);
+          socket.emit('endTextChat', this.props.user.username, this.props.user.coin);
+	  socket.disconnect()
+          this.props.dispatch(userActions.sendSocket(null))
+          this.context.router.push('/')
+	           
         })
     })
     .catch((error) => console.log(error))
-    socket.emit('updateFriends', this.props.friends);
-    socket.disconnect()
-    this.props.dispatch(userActions.sendSocket(null))
-    this.context.router.push('/')
+ })
+  .catch( (error) => console.log(error))
   }
 
   invitation() {

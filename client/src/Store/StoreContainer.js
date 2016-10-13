@@ -6,8 +6,8 @@ import * as userActions from '../Redux/userReducer'
 import axios from 'axios'
 
 class StoreContainer extends React.Component {
-	constructor(props) {
-		super(props)
+	constructor(props,context) {
+		super(props,context)
 	}
 
 	componentWillMount() {
@@ -19,7 +19,33 @@ class StoreContainer extends React.Component {
 
 		    if(!res.data) {
 		      console.log('no session...redirecting to sign up page');
-		      context.context.router.push('/');
+		          var socket = context.props.socket;
+    axios.get('/logout');
+    context.props.dispatch(userActions.toggleLogIn(false));
+
+    let myHeaders = new Headers({'Content-Type': 'application/graphql; charset=utf-8'});
+    let options = {
+
+      method: 'POST',
+      headers: myHeaders,
+      body: `mutation
+        {
+          updateUser(username:"${this.props.user.username}" online: false) 
+          {
+            username
+            online
+          }
+        }`
+    };
+    fetch('/graphql', options).then((res) =>{
+      return res.json().then((data) => {
+          socket.emit('updateFriends', context.props.friends);
+          socket.disconnect()
+          context.props.dispatch(userActions.sendSocket(null))
+          context.context.router.push('/')
+        })
+    })
+    .catch((error) => console.log(error))
 		    }
 		  })
 
@@ -115,5 +141,8 @@ function mapStateToProps(state) {
   }
 }
 
+StoreContainer.contextTypes = {
+  router: PropTypes.object.isRequired
+}
 
 export default connect(mapStateToProps)(StoreContainer)

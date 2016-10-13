@@ -184,28 +184,30 @@ io.sockets.on('connection', function(socket) {
   socket.on('disconnect', function() {
     console.log('socket disconnected')
     User.update({online: false}, {where: {username: socket.name}});
-    var myself;
+    var myself = null;
     var friends = [];
     Db.User.findAll({where: {username: socket.name}})
       .then(function(user){
-        if(user) {
+        if(user[0]) {
           myself = user;
           return Db.sequelize.query("SELECT `FriendTwo`.`id` , `FriendTwo`.`username`, `FriendTwo`.`firstName`, `FriendTwo`.`lastName`, `FriendTwo`.`email`, `FriendTwo`.`dob`, `FriendTwo`.`gender`, `FriendTwo`.`profilePic`, `FriendTwo`.`coin`, `FriendTwo`.`online`, `FriendTwo`.`createdAt`, `FriendTwo`.`updatedAt`, `FriendTwo.Friendship`.`relationship`, `FriendTwo.Friendship`.`textChatCount`, `FriendTwo.Friendship`.`videoChatCount`, `FriendTwo.Friendship`.`lastChatTime`, `FriendTwo.Friendship`.`createdAt`, `FriendTwo.Friendship`.`updatedAt`, `FriendTwo.Friendship`.`userOne`, `FriendTwo.Friendship`.`userTwo` FROM `Users` AS `User` LEFT OUTER JOIN (`Friendships` AS `FriendTwo.Friendship` INNER JOIN `Users` AS `FriendTwo` ON `FriendTwo`.`id` = `FriendTwo.Friendship`.`userTwo`) ON `User`.`id` = `FriendTwo.Friendship`.`userOne` WHERE `FriendTwo.Friendship`.`userOne` ="+user[0].id+";");
         }
       })
       .then((response) => {
-        if(response.length > 0) {
+        if(!!response && response !== undefined ) {
           response[0].forEach(function(friend){
             friends.push(friend); 
           });
         }
       })
       .then(function(nothing){
+	if(!!myself) {
         return Db.sequelize.query("SELECT `FriendOne`.`id` , `FriendOne`.`username`, `FriendOne`.`firstName`, `FriendOne`.`lastName`, `FriendOne`.`email`, `FriendOne`.`dob`, `FriendOne`.`gender`, `FriendOne`.`profilePic`, `FriendOne`.`coin`, `FriendOne`.`online`, `FriendOne`.`createdAt`, `FriendOne`.`updatedAt`, `FriendOne.Friendship`.`relationship`, `FriendOne.Friendship`.`textChatCount`, `FriendOne.Friendship`.`videoChatCount`, `FriendOne.Friendship`.`lastChatTime`, `FriendOne.Friendship`.`createdAt`, `FriendOne.Friendship`.`updatedAt`, `FriendOne.Friendship`.`userOne`, `FriendOne.Friendship`.`userTwo` FROM `Users` AS `User` LEFT OUTER JOIN (`Friendships` AS `FriendOne.Friendship` INNER JOIN `Users` AS `FriendOne` ON `FriendOne`.`id` = `FriendOne.Friendship`.`userOne`) ON `User`.`id` = `FriendOne.Friendship`.`userTwo` WHERE `FriendOne.Friendship`.`userTwo` ="+myself[0].id+";");
+     	}
       })
       .then(function(response){ 
         sockets[socket.name] = null;
-        if(response.length > 0) {
+        if(!!response && response !== undefined )  {
           response[0].forEach(function(friend){
             friends.push(friend);
           });
@@ -229,15 +231,12 @@ io.sockets.on('connection', function(socket) {
 app.get('/logout', function (req, res){
   req.session.destroy();
 	req.logout();
+  res.status(200).send('');
 });
 
 app.get('*', function(req, res) {
   res.redirect('/');
 })
-
-http.listen(port, function(data) {
-  console.log('listening on ' + port);
-});
 
 
 httpsServer.listen(8443);

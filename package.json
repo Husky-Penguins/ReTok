@@ -46,7 +46,6 @@
     "redux": "^3.6.0",
     "redux-localstorage": "^0.4.1",
     "redux-persist": "^4.0.0-alpha6",
-
     "redux-storage": "^4.1.1",
     "redux-storage-engine-localstorage": "^1.1.2",
     "rtcmulticonnection-v3": "^3.3.8",
@@ -62,6 +61,7 @@
     "chai-as-promised": "^5.3.0",
     "cookie-parser": "^1.4.3",
     "enzyme": "^2.4.1",
+    "forever": "^0.15.2",
     "graphql-tester": "0.0.4",
     "gulp": "^3.9.1",
     "gulp-uglify": "^2.0.0",

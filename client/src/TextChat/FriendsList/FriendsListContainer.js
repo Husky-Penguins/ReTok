@@ -5,6 +5,8 @@ import { Scrollbars } from 'react-custom-scrollbars';
 import FriendsListEntry from './FriendsListEntry'
 import * as userActions from '../../Redux/userReducer'
 import OfflineFriendsListEntry from './OfflineFriendsListEntry'
+import EmojiChatContainer from '../EmojiChatContainer/EmojiChatContainer'
+
 
 class FriendsListContainer extends React.Component {
 
@@ -70,6 +72,10 @@ class FriendsListContainer extends React.Component {
           <h4>My Username is: {this.props.user.username}</h4>
         </div>
         <div className= "chatFriendsHeader">
+          <h4><b>Suggested: </b></h4>
+        </div>
+        {this.props.suggestedFriends.map((item, index) => <FriendsListEntry key={index} videoChat={this.videoChat.bind(this)} friend={item} joinRoom={this.joinRoom.bind(this)} room={this.props.room} addHighlightClass={this.addHighlightClass.bind(this)}/>)}
+        <div className= "chatFriendsHeader">
           <h4><b>Online: </b></h4>
         </div>
         
@@ -78,7 +84,11 @@ class FriendsListContainer extends React.Component {
             <h4><b>Offline:</b></h4>
           </div>
               {offline.map((item, index) => <OfflineFriendsListEntry key={index} friend={item} joinRoom={this.joinRoom.bind(this)} room={this.props.room} addHighlightClass={this.addHighlightClass.bind(this)}/>)}
-
+          <div className="EmojiListChat">
+          <Scrollbars style={{ height: 100 }}>
+            <EmojiChatContainer/>
+          </Scrollbars>
+          </div>
       </div>
       )
 
@@ -97,7 +107,8 @@ function mapStateToProps(state) {
     onlineFriends: state.userReducer.onlineFriends,
     chatLog: state.userReducer.chatLog,
     currentChat: state.userReducer.currentChat,
-    friendCount: state.userReducer.friendCount
+    friendCount: state.userReducer.friendCount,
+    suggestedFriends: state.userReducer.suggestedFriends
   }
 }
 
@@ -107,4 +118,3 @@ FriendsListContainer.contextTypes = {
 
 
 export default connect(mapStateToProps)(FriendsListContainer);
-

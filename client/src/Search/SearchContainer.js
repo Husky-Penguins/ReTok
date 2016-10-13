@@ -4,11 +4,11 @@ import { connect } from 'react-redux'
 import Search from './Search.js'
 import * as userActions from '../Redux/userReducer'
 import axios from 'axios'
-
+import { Router, Route, hashHistory, IndexRoute, Link } from 'react-router'
 
 class SearchContainer extends React.Component {
-	constructor(props) {
-		super(props)
+	constructor(props,context) {
+		super(props, context)
 	}
 
   componentWillMount() {
@@ -18,7 +18,33 @@ class SearchContainer extends React.Component {
         console.log('checking auth res data',res.data);
 
         if(!res.data) {
-          this.context.router.push('/');
+            var socket = context.props.socket;
+   	    axios.get('/logout');
+   	    context.props.dispatch(userActions.toggleLogIn(false));
+
+   	    let myHeaders = new Headers({'Content-Type': 'application/graphql; charset=utf-8'});
+   	    let options = {
+
+     	    method: 'POST',
+     	    headers: myHeaders,
+     	    body: `mutation
+       	     {
+         	 updateUser(username:"${this.props.user.username}" online: false) 
+         	 {
+         	  	 username
+           		 online
+         	 }
+       	     }`
+   	   };
+   	   fetch('/graphql', options).then((res) =>{
+     		 return res.json().then((data) => {
+          	     socket.emit('updateFriends', context.props.friends);
+         	     socket.disconnect()
+         	     context.props.dispatch(userActions.sendSocket(null))
+         	     context.context.router.push('/')
+        	 })
+      	   })
+    .catch((error) => console.log(error)) 
         }
       })
 

@@ -54,7 +54,7 @@ class PhotoUploadContainer extends React.Component {
         console.log('checking my user now', this.props.user);
         this.props.dispatch(userActions.userAuth());
 
-        context.context.router.push('/profile'); 
+        context.context.router.push('/text'); 
 
       })
   }

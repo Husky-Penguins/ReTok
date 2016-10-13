@@ -539,12 +539,12 @@ filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=
   list-style-type: none;
 }
 
-.emojiChatContainer{
-  border: 1px solid black;
+.emojiChatContainer {
   background-color: white;
   margin-top: 2%;
   margin-bottom: 2%;
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   height: 100px;
 
@@ -553,9 +553,17 @@ filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=
 .oneEmojiChat{
   margin: 2%;
 }
+.EmojiListChat{
+  margin: 5%;
+  background-color:white;
+  border-radius: 5px;
+  padding: 2%;
+}
 
 .emojiChatWrapper {
+  margin: 2%;
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   font-size: 3rem;
 }
