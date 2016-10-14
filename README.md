@@ -5,9 +5,9 @@ Provide a platform for people to re-networking people :smile: <br />
 People can communicate each other in text or video chats.
 
 ## Contributors
-- Product Owner: Robert Chao <br />
-- Scrum Master: Michael Chow <br />
-- Team Member: Andrew Sutedja <br />
+- Product Owner: Robert Chao
+- Scrum Master: Michael Chow
+- Team Member: Andrew Sutedja
 - Team Member: Yu-An Lo
 
 ## How to use?
@@ -33,3 +33,5 @@ People can communicate each other in text or video chats.
   * EC2
   * S3
   * RDB
+
+## 
