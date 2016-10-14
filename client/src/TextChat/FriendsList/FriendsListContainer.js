@@ -65,6 +65,8 @@ class FriendsListContainer extends React.Component {
   render() {
 
     var offline = this.props.friends.filter((item, index) => item.online === false);
+    var suggestedFriends = this.props.suggestedFriends;
+    var onlineFriends = this.props.onlineFriends.filter(friend => !suggestedFriends.includes(friend));
     return (
 
       <div className="chatListContainer">
@@ -79,7 +81,7 @@ class FriendsListContainer extends React.Component {
           <h4><b>Online: </b></h4>
         </div>
         
-        {this.props.onlineFriends.map((item, index) => <FriendsListEntry key={index} videoChat={this.videoChat.bind(this)} friend={item} joinRoom={this.joinRoom.bind(this)} room={this.props.room} addHighlightClass={this.addHighlightClass.bind(this)}/>)}
+        {onlineFriends.map((item, index) => <FriendsListEntry key={index} videoChat={this.videoChat.bind(this)} friend={item} joinRoom={this.joinRoom.bind(this)} room={this.props.room} addHighlightClass={this.addHighlightClass.bind(this)}/>)}
           <div className ="chatFriendsHeader">
             <h4><b>Offline:</b></h4>
           </div>

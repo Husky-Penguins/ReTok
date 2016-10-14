@@ -8,8 +8,8 @@ import EmojiChatContainer from './EmojiChatContainer/EmojiChatContainer.js'
 import shortToUnicode from '../../shortToUnicode.js'
 import unicodeToShort from '../../unicodeToShort.js'
 import axios from 'axios'
-// import { _.escape, _.unescape, escapeMap ,unescapeMap} from 'underscore'
 import * as userActions from '../Redux/userReducer'
+import updateHelper from '../updateHelper.js'
  
 class TextChatContainer extends React.Component {
 
@@ -60,14 +60,32 @@ class TextChatContainer extends React.Component {
               .catch((error) => console.log(error))
            })
             .catch( (error) => console.log(error))
-          }
+          } else {
+        let myHeaders = new Headers({'Content-Type': 'application/graphql; charset=utf-8'});
+        let options1 = {
+
+          method: 'POST',
+          headers: myHeaders,
+          body: `
+              mutation {
+              updateUser(username: \"${username}\" online: true)  {
+                username
+              }
+              }
+              `
+        };
+        fetch('/graphql', options1)
+      }
      })     
     .catch((error) => console.log(error))
 
     var socket = this.props.socket
     socket.emit('login', this.props.user.username)
     socket.emit('updateFriends', this.props.friends);
-    var username = this.props.user.username    
+    var username = this.props.user.username   
+
+    socket.on('update', () => updateHelper(this))
+    updateHelper(this); 
 
     console.log('check new Chats Log on mount', this.state.newChatHistoryLog);
     var context = this;
@@ -122,28 +140,18 @@ class TextChatContainer extends React.Component {
       var chat = context.props.currentChat.slice();
       chat.push(message);
 
-   
-
       context.props.dispatch(userActions.updateCurrentChat(chat));
-
       var logCopy = Object.assign({}, context.props.chatLog);
-
       logCopy[context.props.room] = chat;
-
       context.props.dispatch(userActions.updateChatLog(logCopy));
 
 
       var logComponentCopy = Object.assign({}, context.state.newChatHistoryLog);
-
       logComponentCopy[context.props.room] = logComponentCopy[context.props.room] || [];
-
       logComponentCopy[context.props.room].push(message);
-
       context.setState({
         newChatHistoryLog: logComponentCopy
       })
-
-  
     });
 
     socket.on('joinRoomSuccess', function(room, friend) {
@@ -156,26 +164,17 @@ class TextChatContainer extends React.Component {
       var oldRoom = context.props.room;
 
       var chatLogCopy = Object.assign({}, context.props.chatLog);
-      console.log('check chatlog before', chatLogCopy);
       chatLogCopy[oldRoom] = context.props.chatLog[oldRoom] || context.props.currentChat;
-      console.log('check chatlog after', chatLogCopy);
-
       context.props.dispatch(userActions.createRoom(room));
 
-      console.log('checking joinroom success chatlog a bit later', context.props.chatLog);
-
       if(!chatLogCopy.hasOwnProperty(room)) {
-        console.log('i hit the falsy value for hasOwnProperty');
         chatLogCopy[room] = [];
         context.props.dispatch(userActions.updateChatLog(chatLogCopy));
-        console.log('checking chatLog --->', context.props.chatLog);
         context.props.dispatch(userActions.updateCurrentChat([]));
 
       } else {
-        console.log('i hit the truthy value for hasOwnProperty');
         context.props.dispatch(userActions.updateChatLog(chatLogCopy));
         context.props.dispatch(userActions.updateCurrentChat(chatLogCopy[room]));
-        console.log('checking chatLog --->', context.props.chatLog);
       }
 
 
@@ -188,9 +187,10 @@ class TextChatContainer extends React.Component {
 
 
     this.props.dispatch(userActions.updateCurrentChat(clearChat));
-
-    socket.removeAllListeners("joinRoomSuccess");
-    socket.removeAllListeners("textmessagereceived");
+    if(socket) {
+      socket.removeAllListeners("joinRoomSuccess");
+      socket.removeAllListeners("textmessagereceived");
+    }
 
     let myHeaders = new Headers({'Content-Type': 'application/graphql; charset=utf-8'});
     let options = {

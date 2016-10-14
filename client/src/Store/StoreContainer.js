@@ -49,7 +49,23 @@ class StoreContainer extends React.Component {
 		          .catch((error) => console.log(error))
 		       })
 		        .catch( (error) => console.log(error))
-		      }
+		      } else {
+        let myHeaders = new Headers({'Content-Type': 'application/graphql; charset=utf-8'});
+        let options1 = {
+
+          method: 'POST',
+          headers: myHeaders,
+          body: `
+              mutation {
+              updateUser(username: \"${username}\" online: true)  {
+                username
+              }
+              }
+              `
+        };
+        fetch('/graphql', options1)
+          }
+
 		 })     
 		.catch((error) => console.log(error))
 		

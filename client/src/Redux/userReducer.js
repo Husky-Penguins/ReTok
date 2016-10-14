@@ -127,7 +127,6 @@ let restore = (key, def) => localStorage.getItem(key) || def;
 
 let restoreDefault = (key, def) => {
   let stored = restore(key);
-  console.log('checking stored', stored);
   return stored != null
     ? JSON.parse(stored)
     :def
@@ -229,8 +228,6 @@ export default function userReducer (state = userInitialState, action) {
     state = {...state, socket: action.socket};
     break;
   }
-  console.log('checking the action -->', action);
-  console.log('checking state in reducer', state);
   let {connection, socket, ...serials} = state;
   persist('client', JSON.stringify(serials));
   return state;

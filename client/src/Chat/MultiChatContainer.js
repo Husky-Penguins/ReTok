@@ -23,7 +23,6 @@ class MultiChatContainer extends React.Component {
     axios.get('/auth')
       .then(function(res) {
         console.log('checking auth res data',res.data);
-
         if(!res.data) {
           console.log('no session...redirecting to sign up page');
               var socket = context.props.socket;
@@ -56,6 +55,21 @@ class MultiChatContainer extends React.Component {
               .catch((error) => console.log(error))
            })
             .catch( (error) => console.log(error))
+          } else {
+        let myHeaders = new Headers({'Content-Type': 'application/graphql; charset=utf-8'});
+        let options1 = {
+
+          method: 'POST',
+          headers: myHeaders,
+          body: `
+              mutation {
+              updateUser(username: \"${username}\" online: true)  {
+                username
+              }
+              }
+              `
+        };
+        fetch('/graphql', options1)
           }
      })     
     .catch((error) => console.log(error))
